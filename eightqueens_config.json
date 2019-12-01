@@ -1,0 +1,48 @@
+{
+  "main_file": "EightQueens",
+  "compilation_points": 20,
+  "test_suite": [
+    {
+      "args": "",
+      "input": "",
+      "output": "",
+      "points": 50
+    },
+    {
+      "args": "-1",
+      "input": "",
+      "output": "",
+      "points": 20
+    },
+	{
+      "args": "9",
+      "input": "",
+      "output": "",
+      "points": 50
+    },
+    {
+      "args": "5.5",
+      "input": "",
+      "output": "",
+      "points": 20
+    },
+	{
+      "args": "abc",
+      "input": "",
+      "output": "",
+      "points": 20
+    },
+	{
+      "args": "4",
+      "input": "",
+      "output": "",
+      "points": 20
+    },
+	{
+      "args": "6",
+      "input": "",
+      "output": "",
+      "points": 20
+    }
+  ]
+}

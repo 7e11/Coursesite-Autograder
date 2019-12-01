@@ -1,12 +1,11 @@
-
-
 import argparse, csv, subprocess, json, os, re
 from zipfile import ZipFile
 
 # Parse user arguments
 parser = argparse.ArgumentParser(description='Compiles and grades java assignments.')
-parser.add_argument('submissions', help='The zip file downloaded from coursesite') #Positional argument
-parser.add_argument('--config', help='The JSON file which contains the test cases', required=True)
+parser.add_argument('submissions', help='The zip file downloaded from coursesite')  # Positional argument
+parser.add_argument('config', help='The JSON file which contains the test cases')
+parser.add_argument('-m', '--manual', help='If you want to grade in manual mode. Output for each test case must be checked manually. Useful if students have leeway with their output format and it can\'t be checked automatically.', action='store_const', const=True, default=False, required=False)
 args = parser.parse_args()
 
 # Parse the JSON file
@@ -26,10 +25,11 @@ with ZipFile(args.submissions, 'r') as sub_zip:
 os.chdir('./{}'.format(sub_dir))
 results = []
 
-for directory_name in os.listdir('.'):
+# Sorted by lastname, then firstname
+for directory_name in sorted(os.listdir('.'), key=lambda d: tuple(reversed(d.split('_')[0].rsplit(' ', 1)))):
     test_results = []
     running_total = 0
-    # Assuming stuff like "Antonio Lia_7754335_assignsubmission_file_"
+    # Assuming format like "Antonio Lia_7754335_assignsubmission_file_"
     first_name, last_name = directory_name.split('_')[0].rsplit(' ', 1)
     os.chdir('./{}'.format(directory_name))  # switch into the directory
     # FIXME: This assumes javac is in your path.
@@ -44,12 +44,23 @@ for directory_name in os.listdir('.'):
         sub_info['points_sum'] = 0
         sub_info['percentage'] = 0
         results.append(sub_info)
+
+        if args.manual:
+            print('{} failed to compile.'.format(first_name + ' ' + last_name))
+            input()
+
     else:
+        # Note that it compiled if manual mode.
+        if args.manual:
+            print('{} compiled successfully.'.format(first_name + ' ' + last_name))
+            input()
+
         # Run the test suite
         sub_info = {"first_name": first_name, "last_name": last_name, "compile_points": compilation_points}
         for index, test in enumerate(test_suite):
             # FIXME: This assumes java is in your path.
-            java_run_proc = subprocess.run(['java', main_file], input=test['input'], capture_output=True)
+            java_run_proc = subprocess.run(['java', main_file, test['args']], input=test['input'], capture_output=True)
+            # FIXME: This compares the raw b'' string. Is this what we want? Needs testing...
             if str(java_run_proc.stdout).strip() == test['output'].strip():
                 points = test['points']
             else:
@@ -57,6 +68,15 @@ for directory_name in os.listdir('.'):
 
             running_total += points
             sub_info['test_{}_points'.format(index)] = points
+
+            # Manual mode check of output.
+            if args.manual:
+                print('Test: {} args: {} stdin: {}'.format(index, test['args'], test['input']))
+                print('stdout:')
+                print(java_run_proc.stdout.decode())
+                print('stderr:')
+                print(java_run_proc.stderr.decode())
+                input()
 
         # add final columns
         sub_info['points_sum'] = running_total
