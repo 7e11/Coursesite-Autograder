@@ -16,7 +16,7 @@ This will produce the `.zip` submission file which is required for the program.
 - Outputs a CSV of the grades
 - `java` and `javac` must be in your path.
 
-#### Manual mode
+### Manual mode
 `-m` or `-manual` allows the grader to manually check the output of each test case for each student. 
 This is ideal when students have some leeway in their output.
 This is many times faster than running their java files 4 or 5 times to check their program against all input edge cases.
