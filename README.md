@@ -1,11 +1,12 @@
 # Coursesite-Autograder
 Python script to automate grading of coursesite submitted java assignments.
 
-## Notes
-- Select student submissions on coursesite, then navigate to the bottom of the page and select 
+Select student submissions on coursesite, then navigate to the bottom of the page and select 
 
-"***with selected...*** \[Download selected submissions\]"
-  - This will produce the `.zip` submission file which is required for the program.
+> "***with selected...*** \[Download selected submissions\]"
+- This will produce the `.zip` submission file which is required for the program.
+
+## Notes
 - Tested with python 3.7
 - Expects that student submitted raw .java files with no directory structure
 - The json config must be changed for every assignment.
