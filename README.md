@@ -2,7 +2,9 @@
 Python script to automate grading of coursesite submitted java assignments.
 
 Select student submissions on coursesite, then navigate to the bottom of the page and select 
+
 > "***with selected...*** \[Download selected submissions\]"
+
 This will produce the `.zip` submission file which is required for the program.
 
 ## Notes
